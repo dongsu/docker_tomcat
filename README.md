@@ -10,10 +10,9 @@ This document gives a high-level details on how one can go about achieving it.
 Pre-requisites
 ==============
 
-All the commands shown are run from a Ubuntu workstation (marked with $). If you are using another platform, you need to modify these accordingly.
-You also need Nova client (https://github.com/openstack/python-novaclient) on this workstation.
-And of course, a Rackspace (public cloud) account to play with.
-
+1) All the commands shown are run from a Ubuntu workstation (marked with $). If you are using another platform, you need to modify these accordingly.
+2) You also need Nova client (https://github.com/openstack/python-novaclient) on this workstation.
+3) And of course, a Rackspace (public cloud) account to play with.
 
 Steps
 =====
@@ -30,28 +29,31 @@ Steps
 
 3) Wait for the mydkr1 to start and ready. You can check the status with:
 
-::
 
     $ nova show mydkr1
 
-Once it is ready, note accessIPv4. In the following instructions use this IP for all references to mydkr1
+Once it is ready, note accessIPv4. In the following instructions use this IP for all references to mydkr1.
 
 4) Connect to mydkr1 and prepare it with docker
 
-::
 
    $ ssh -i mykey root@192.237.188.82
    
 Now, for docker itself:
 
-::
 
    # apt-get update
+
    # apt-get install linux-image-extra-`uname -r`
+
    # sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
+
    # sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
+
    # apt-get update
+
    # apt-get install lxc-docker
+
    
 Create/Update docker configuration so that the daemon is running TCP port and hence can be accessed remotely. We will use this later to launch new docker instances remotely from a script:
 
