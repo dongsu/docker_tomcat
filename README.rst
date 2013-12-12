@@ -48,14 +48,13 @@ Once it is ready, note accessIPv4. In the following instructions use this IP for
    # apt-get install lxc-docker
 
    
-6) Create/Update docker configuration so that the daemon is running TCP port and hence can be accessed remotely. We will use this later to launch new docker instances remotely from a script.
-
-::
+6) Create/Update docker configuration so that the daemon is running TCP port and hence can be accessed remotely. We will use this later to launch new docker instances remotely from a script::
 
    root@mydkr1:~# cat /etc/default/docker
    DOCKER\_OPTS="-H unix:///var/run/docker.sock -H tcp://0.0.0.0:5555"
 
 7) Verify that docker is correctly installed::
+
 
    # docker run -i -t ubuntu /bin/bash
 
@@ -106,7 +105,9 @@ Exit from mydkr1 back to your workstation::
    # apt-get install nginx
 
 14) Configure nginx. First disable sites-enabled by commenting out the line "include /etc/nginx/sites-enabled/*" in /etc/nginx/nginx.conf.
+
 15) Copy backends, and default.conf to /etc/nginx/conf.d by suitably modifying them. You can start with empty backends or use the docker instance running in mydkr as the sole server.
+
 16) Set nginx up to run on each boot.
 
 17) Next we create a new cloud server. It will be more complete to demonstrate the functionality with two cloud servers.
@@ -136,7 +137,7 @@ Suggestions
 * Instead of using nova command line, you can use Cloud Servers API.
 * Completely automate the launch of new docker instances based on load, and other performance merics. Also, build a scheduling mechanism to identify the right cloud server to run it on.
 * Automate the launch of new cloud servers based on number of docker instances running on already existing ones, and other performance metrics. 
-* Beware of RackConnect automation:
+* Be aware of RackConnect automation:
    a) Its interacttion with how cloud servers are launched. Review: http://www.rackspace.com/knowledge_center/article/the-rackconnect-api. 
    b) Als, see, accessing RackConnected public cloud servers: http://www.rackspace.com/knowledge_center/article/accessing-rackconnected-cloud-servers
 
