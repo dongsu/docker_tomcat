@@ -4,7 +4,10 @@ Introduction and Goal
 The goal of this exercise is to use Rackspace public cloud servers as the hosting servers for running docker instances that run tomcat applications.
 Each tomcat application runs on multiple docker instances (possibly running on multiple cloud servers) and load balanced by an nginx proxy.
 
-This document gives a high-level details on how one can go about achieving it.
+This document gives a high-level details on how one can go about achieving it. See the image below for reference.
+
+.. image:: architecture.png
+
 
 Pre-requisites
 ==============
