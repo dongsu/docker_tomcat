@@ -51,13 +51,11 @@ Once it is ready, note accessIPv4. In the following instructions use this IP for
 6) Create/Update docker configuration so that the daemon is running TCP port and hence can be accessed remotely. We will use this later to launch new docker instances remotely from a script::
 
    root@mydkr1:~# cat /etc/default/docker
-   DOCKER_OPTS="-H unix:///var/run/docker.sock -H tcp://0.0.0.0:5555"
+   DOCKER\_OPTS="-H unix:///var/run/docker.sock -H tcp://0.0.0.0:5555"
 
 7) Verify that docker is correctly installed::
 
-
    # docker run -i -t ubuntu /bin/bash
-   root@f169b69d6370:/# exit
 
 8) Exit from docker instance. It is shutdown automatically::
 
@@ -85,7 +83,7 @@ Run Curl to verify::
 Shutdown docker instances::
 
 
-   # docker stop <container_id>
+   # docker stop <container\_id>
 
 Exit from mydkr1 back to your workstation::
 
