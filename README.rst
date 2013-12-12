@@ -6,16 +6,27 @@ Each tomcat application runs on multiple docker instances (possibly running on m
 
 This document gives a high-level details on how one can go about achieving it.
 
-
 Pre-requisites
 ==============
 
 * All the commands shown are run from a Ubuntu workstation (marked with $). If you are using another platform, you need to modify these accordingly.
 * You also need Nova client (https://github.com/openstack/python-novaclient) on this workstation.
 * And of course, a Rackspace (public cloud) account to play with.
+* Python fabric and docker python bindings
 
-Steps
-=====
+Highlevel plan
+==============
+
+1) Create a cloud server and install docker
+2) Create a docker image with JDK+Tomcat
+3) Create a snapshot of this cloud server
+4) Create a cloud server with nginx
+5) Using the snapshot of the cloud server, create as many cloud servers as desired
+6) Using provided script (run_docker.py) launch docker with tomcat instances in these cloud server instances
+7) nginx acts as the load balancer and proxy for the docker instances
+
+Detailed Steps
+==============
 
 1) First create a ssh key pair to use for logging into cloud servers, for example::
 
@@ -99,33 +110,30 @@ Steps
 
     $ ssh -i mykey root@mynginx
 
-::
     # apt-get install nginx
 
-14) Configure nginx. First disable sites-enabled by commenting out the line "include /etc/nginx/sites-enabled/*" in /etc/nginx/nginx.conf.
+14) Configure nginx. First disable sites-enabled by commenting out the line "include /etc/nginx/sites-enabled/\*" in /etc/nginx/nginx.conf.
 
 15) Copy backends, and default.conf to /etc/nginx/conf.d by suitably modifying them. You can start with empty backends or use the docker instance running in mydkr as the sole server.
 
 16) Set nginx up to run on each boot.
+
 17) Next we create a new cloud server. It will be more complete to demonstrate the functionality with two cloud servers.
 
    First Find the image id of the snapshot created earlier with::
 
 
    $ nova image-list
-
    $ nova boot --image <image id from above> --flavor 2 --file /root/.ssh/authorized_keys=mykey.pub mydkr2
 
 
-Now you can use the script XXX to run an instance of docker in this cloud server (or any other cloud server)
+Now you can use the script run_docker.py as the starting point to run an instance of docker in this cloud server (or any other cloud server). Make sure to modify as necessary before running.
 
-   # ...
+   $ run_docker.py
 
 Now you have two tomcat instances running on two docker instances each of which is running on a separate cloud server. And both are behind the nginx proxy.
 
-18) Test
-
-   From your work station issue curl command to make sure that tomcat welcome page shows up.
+18) Test: from your work station issue curl command to make sure that tomcat welcome page shows up.
 
 Suggestions
 ===========
@@ -134,9 +142,9 @@ Suggestions
 * Instead of using nova command line, you can use Cloud Servers API.
 * Completely automate the launch of new docker instances based on load, and other performance merics. Also, build a scheduling mechanism to identify the right cloud server to run it on.
 * Automate the launch of new cloud servers based on number of docker instances running on already existing ones, and other performance metrics.
-* Be aware of RackConnect automation:
-   a) Its interacttion with how cloud servers are launched. Review: http://www.rackspace.com/knowledge_center/article/the-rackconnect-api.
-   b) Als, see, accessing RackConnected public cloud servers: http://www.rackspace.com/knowledge_center/article/accessing-rackconnected-cloud-servers
+* Make sure to read RackConnect automation:
+   a) Its interaction with how cloud servers are launched. Review: http://www.rackspace.com/knowledge_center/article/the-rackconnect-api.
+   b) Also, see, accessing RackConnected public cloud servers: http://www.rackspace.com/knowledge_center/article/accessing-rackconnected-cloud-servers
 
 
 References
@@ -155,6 +163,4 @@ Files
 =====
 * Dockerfile, docker
 * nginx default.conf and backends
-* docker instance automation script
-
-
+* docker instance automation script, run_docker.py
