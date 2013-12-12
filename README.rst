@@ -48,7 +48,9 @@ Once it is ready, note accessIPv4. In the following instructions use this IP for
    # apt-get install lxc-docker
 
    
-6) Create/Update docker configuration so that the daemon is running TCP port and hence can be accessed remotely. We will use this later to launch new docker instances remotely from a script::
+6) Create/Update docker configuration so that the daemon is running TCP port and hence can be accessed remotely. We will use this later to launch new docker instances remotely from a script.
+
+::
 
    root@mydkr1:~# cat /etc/default/docker
    DOCKER\_OPTS="-H unix:///var/run/docker.sock -H tcp://0.0.0.0:5555"
@@ -71,7 +73,6 @@ Once it is ready, note accessIPv4. In the following instructions use this IP for
    # docker run -d -p 8080 sai/tomcat7
 
 Get the exposed port by running::
-
 
    # docker ps
 
