@@ -17,29 +17,28 @@ Pre-requisites
 Steps
 =====
 
-1) First create a ssh key pair to use for logging into cloud servers, for example
+1) First create a ssh key pair to use for logging into cloud servers, for example::
 
 
     $ ssh-keygen -q -t rsa -f mykey -N
 
-2) Create a cloud server. This is what is used to install docker, configure a docker image with necessary software (JDK and tomcat). The same cloud server is snapshotted so that additional VMs can be created as necessary.
+2) Create a cloud server. This is what is used to install docker, configure a docker image with necessary software (JDK and tomcat). The same cloud server is snapshotted so that additional VMs can be created as necessary::
 
 
     $ nova boot --image 7437239b-bf92-4489-9607-889be189e772 --flavor 2 --file /root/.ssh/authorized_keys=mykey.pub mydkr1
 
-3) Wait for the mydkr1 to start and ready. You can check the status with:
+3) Wait for the mydkr1 to start and ready. You can check the status with::
 
 
     $ nova show mydkr1
 
 Once it is ready, note accessIPv4. In the following instructions use this IP for all references to mydkr1.
 
-4) Connect to mydkr1 and prepare it with docker::
+4) Connect to mydkr1::
 
    $ ssh -i mykey root@192.237.188.82
    
-Now, for docker itself::
-
+5) Prepare mydkr1::
 
    # apt-get update
    # apt-get install linux-image-extra-`uname -r`
@@ -49,31 +48,27 @@ Now, for docker itself::
    # apt-get install lxc-docker
 
    
-Create/Update docker configuration so that the daemon is running TCP port and hence can be accessed remotely. We will use this later to launch new docker instances remotely from a script::
+6) Create/Update docker configuration so that the daemon is running TCP port and hence can be accessed remotely. We will use this later to launch new docker instances remotely from a script::
 
    root@mydkr1:~# cat /etc/default/docker
    DOCKER_OPTS="-H unix:///var/run/docker.sock -H tcp://0.0.0.0:5555"
 
-
-Verify that docker is correctly installed::
+7) Verify that docker is correctly installed::
 
 
    # docker run -i -t ubuntu /bin/bash
    root@f169b69d6370:/# exit
 
-Exit from docker instance. It is shutdown automatically::
+8) Exit from docker instance. It is shutdown automatically::
 
    root@f169b69d6370:/# exit
 
-Copy Dockerfile to current directory. You can get a sample from here. This includes all the instructions to build a docker image with JDK+Tomcat.
-
-Now build a docker image::
+9) Build a docker image. Start by copying Dockerfile to current directory. This file includes all the instructions to build a docker image with JDK+Tomcat::
 
 
    # docker build -t sai/tomcat7 .
 
-Verify that the image functions as expected::
-
+10) Verify that the image functions as expected::
 
    # docker run -d -p 8080 sai/tomcat7
 
@@ -97,45 +92,33 @@ Exit from mydkr1 back to your workstation::
 
    # exit
 
-Take a VM image snapshot. This can be used to create additional cloud servers to scale.
+11) Take a VM image snapshot. This can be used to create additional cloud servers to scale::
 
    $ nova image-create --poll mydkr1 mydkr_snapshot
 
-5) Create a cloud server to run nginx:
-
-::
+12) Create a cloud server to run nginx::
 
    $ nova boot --image 7437239b-bf92-4489-9607-889be189e772 --flavor 2 --file /root/.ssh/authorized_keys=mykey.pub mynginx
    $ nova show mynginx
 
-Log into this cloud server to install and configure nginx:
-
-::
+13) Log into this cloud server, mynginx, to install and configure nginx::
 
    $ ssh -i mykey root@mynginx
    # apt-get install nginx
 
-Configure nginx. First disable sites-enabled by commenting out the line "include /etc/nginx/sites-enabled/*" in /etc/nginx/nginx.conf.
+14) Configure nginx. First disable sites-enabled by commenting out the line "include /etc/nginx/sites-enabled/*" in /etc/nginx/nginx.conf.
+15) Copy backends, and default.conf to /etc/nginx/conf.d by suitably modifying them. You can start with empty backends or use the docker instance running in mydkr as the sole server.
+16) Set nginx up to run on each boot.
 
-Copy backends, and default.conf to /etc/nginx/conf.d by suitably modifying them. You can start with empty backends or use the docker instance running in mydkr as the sole server.
+17) Next we create a new cloud server. It will be more complete to demonstrate the functionality with two cloud servers.
 
+   First Find the image id of the snapshot created earlier with::
 
-Set nginx up to run on each boot.
-
-
-6) Next we create a new cloud server. It will be more complete to demonstrate the functionality with two cloud servers.
-
-   First Find the image id of the snapshot created earlier with:
-
-::
 
    $ nova image-list
 
-::
-
    $ nova boot --image <image id from above> --flavor 2 --file /root/.ssh/authorized_keys=mykey.pub mydkr2
 
-::
 
 Now you can use the script XXX to run an instance of docker in this cloud server (or any other cloud server)
 
@@ -143,7 +126,7 @@ Now you can use the script XXX to run an instance of docker in this cloud server
 
 Now you have two tomcat instances running on two docker instances each of which is running on a separate cloud server. And both are behind the nginx proxy.
 
-7) Test
+18) Test
 
    From your work station issue curl command to make sure that tomcat welcome page shows up.
 
