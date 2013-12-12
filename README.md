@@ -10,9 +10,9 @@ This document gives a high-level details on how one can go about achieving it.
 Pre-requisites
 ==============
 
-1) All the commands shown are run from a Ubuntu workstation (marked with $). If you are using another platform, you need to modify these accordingly.
-2) You also need Nova client (https://github.com/openstack/python-novaclient) on this workstation.
-3) And of course, a Rackspace (public cloud) account to play with.
+* All the commands shown are run from a Ubuntu workstation (marked with $). If you are using another platform, you need to modify these accordingly.
+* You also need Nova client (https://github.com/openstack/python-novaclient) on this workstation.
+* And of course, a Rackspace (public cloud) account to play with.
 
 Steps
 =====
@@ -36,85 +36,68 @@ Once it is ready, note accessIPv4. In the following instructions use this IP for
 
 4) Connect to mydkr1 and prepare it with docker
 
-
    $ ssh -i mykey root@192.237.188.82
    
-Now, for docker itself:
+Now, for docker itself::
 
 
    # apt-get update
-
    # apt-get install linux-image-extra-`uname -r`
-
    # sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
-
    # sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
-
    # apt-get update
-
    # apt-get install lxc-docker
 
    
-Create/Update docker configuration so that the daemon is running TCP port and hence can be accessed remotely. We will use this later to launch new docker instances remotely from a script:
-
-::
+Create/Update docker configuration so that the daemon is running TCP port and hence can be accessed remotely. We will use this later to launch new docker instances remotely from a script::
 
    root@mydkr1:~# cat /etc/default/docker
    DOCKER_OPTS="-H unix:///var/run/docker.sock -H tcp://0.0.0.0:5555"
 
 
-Verify that docker is correctly installed:
+Verify that docker is correctly installed::
 
-::
 
    # docker run -i -t ubuntu /bin/bash
    root@f169b69d6370:/# exit
 
-Exit from docker instance. It is shutdown automatically.
-
-::
+Exit from docker instance. It is shutdown automatically::
 
    root@f169b69d6370:/# exit
 
 Copy Dockerfile to current directory. You can get a sample from here. This includes all the instructions to build a docker image with JDK+Tomcat.
 
-::
+Now build a docker image::
+
 
    # docker build -t sai/tomcat7 .
 
-Verify that the image functions as expected:
+Verify that the image functions as expected::
 
-::
 
    # docker run -d -p 8080 sai/tomcat7
 
-Get the exposed port by running
+Get the exposed port by running::
 
-::
 
    # docker ps
 
-Run Curl to verify:
+Run Curl to verify::
 
-::
 
    # curl -X GET http://localhost:port
 
-Shutdown docker instances:
+Shutdown docker instances::
 
-::
 
    # docker stop <container_id>
 
-Exit from mydkr1 back to your workstation.
+Exit from mydkr1 back to your workstation::
 
-::
 
    # exit
 
 Take a VM image snapshot. This can be used to create additional cloud servers to scale.
-
-::
 
    $ nova image-create --poll mydkr1 mydkr_snapshot
 
