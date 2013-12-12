@@ -29,16 +29,16 @@ Steps
 
 3) Wait for the mydkr1 to start and ready. You can check the status with::
 
-
     $ nova show mydkr1
 
-Once it is ready, note accessIPv4. In the following instructions use this IP for all references to mydkr1.
+    Once it is ready, note accessIPv4. In the following instructions use this IP for all references to mydkr1.
 
 4) Connect to mydkr1::
 
    $ ssh -i mykey root@192.237.188.82
-   
+
 5) Prepare mydkr1::
+
 
    # apt-get update
    # apt-get install linux-image-extra-`uname -r`
@@ -47,69 +47,66 @@ Once it is ready, note accessIPv4. In the following instructions use this IP for
    # apt-get update
    # apt-get install lxc-docker
 
-   
+
 6) Create/Update docker configuration so that the daemon is running TCP port and hence can be accessed remotely. We will use this later to launch new docker instances remotely from a script::
 
-   root@mydkr1:~# cat /etc/default/docker
-   DOCKER\_OPTS="-H unix:///var/run/docker.sock -H tcp://0.0.0.0:5555"
+     root@mydkr1:~# cat /etc/default/docker
+     DOCKER_OPTS="-H unix:///var/run/docker.sock -H tcp://0.0.0.0:5555"
 
 7) Verify that docker is correctly installed::
-
 
    # docker run -i -t ubuntu /bin/bash
 
 8) Exit from docker instance. It is shutdown automatically::
 
-   root@f169b69d6370:/# exit
+     root@f169b69d6370:/# exit
 
 9) Build a docker image. Start by copying Dockerfile to current directory. This file includes all the instructions to build a docker image with JDK+Tomcat::
 
+     # docker build -t sai/tomcat7 .
 
-   # docker build -t sai/tomcat7 .
+10) a) Verify that the image functions as expected::
 
-10) Verify that the image functions as expected::
+       # docker run -d -p 8080 sai/tomcat7
 
-   # docker run -d -p 8080 sai/tomcat7
+    b) Get the exposed port by running::
 
-Get the exposed port by running::
+       # docker ps
 
-   # docker ps
+    c) Run Curl to verify::
 
-Run Curl to verify::
+       # curl -X GET http://localhost:port
 
+    d) Shutdown docker instances::
 
-   # curl -X GET http://localhost:port
+       # docker stop <container_id>
 
-Shutdown docker instances::
-
-
-   # docker stop <container\_id>
-
-Exit from mydkr1 back to your workstation::
+    e) Exit from mydkr1 back to your workstation::
 
 
-   # exit
+       # exit
 
 11) Take a VM image snapshot. This can be used to create additional cloud servers to scale::
 
-   $ nova image-create --poll mydkr1 mydkr_snapshot
+    $ nova image-create --poll mydkr1 mydkr_snapshot
 
 12) Create a cloud server to run nginx::
 
-   $ nova boot --image 7437239b-bf92-4489-9607-889be189e772 --flavor 2 --file /root/.ssh/authorized_keys=mykey.pub mynginx
-   $ nova show mynginx
+    $ nova boot --image 7437239b-bf92-4489-9607-889be189e772 --flavor 2 --file /root/.ssh/authorized_keys=mykey.pub mynginx
+    $ nova show mynginx
 
 13) Log into this cloud server, mynginx, to install and configure nginx::
 
-   $ ssh -i mykey root@mynginx
-   # apt-get install nginx
+    $ ssh -i mykey root@mynginx
+
+::
+    # apt-get install nginx
 
 14) Configure nginx. First disable sites-enabled by commenting out the line "include /etc/nginx/sites-enabled/*" in /etc/nginx/nginx.conf.
 
 15) Copy backends, and default.conf to /etc/nginx/conf.d by suitably modifying them. You can start with empty backends or use the docker instance running in mydkr as the sole server.
 
 16) Set nginx up to run on each boot.
-
 17) Next we create a new cloud server. It will be more complete to demonstrate the functionality with two cloud servers.
 
    First Find the image id of the snapshot created earlier with::
@@ -136,9 +133,9 @@ Suggestions
 * Run all cloud servers hosting docker with servicenet IP only and run the docker instances launch script from with in a cloud server so that it can reach other cloud servers over the service net.
 * Instead of using nova command line, you can use Cloud Servers API.
 * Completely automate the launch of new docker instances based on load, and other performance merics. Also, build a scheduling mechanism to identify the right cloud server to run it on.
-* Automate the launch of new cloud servers based on number of docker instances running on already existing ones, and other performance metrics. 
+* Automate the launch of new cloud servers based on number of docker instances running on already existing ones, and other performance metrics.
 * Be aware of RackConnect automation:
-   a) Its interacttion with how cloud servers are launched. Review: http://www.rackspace.com/knowledge_center/article/the-rackconnect-api. 
+   a) Its interacttion with how cloud servers are launched. Review: http://www.rackspace.com/knowledge_center/article/the-rackconnect-api.
    b) Als, see, accessing RackConnected public cloud servers: http://www.rackspace.com/knowledge_center/article/accessing-rackconnected-cloud-servers
 
 
@@ -159,3 +156,5 @@ Files
 * Dockerfile, docker
 * nginx default.conf and backends
 * docker instance automation script
+
+
