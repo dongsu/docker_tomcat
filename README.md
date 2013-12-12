@@ -20,13 +20,11 @@ Steps
 
 1) First create a ssh key pair to use for logging into cloud servers, for example
 
-::
 
     $ ssh-keygen -q -t rsa -f mykey -N
 
 2) Create a cloud server. This is what is used to install docker, configure a docker image with necessary software (JDK and tomcat). The same cloud server is snapshotted so that additional VMs can be created as necessary.
 
-::
 
     $ nova boot --image 7437239b-bf92-4489-9607-889be189e772 --flavor 2 --file /root/.ssh/authorized_keys=mykey.pub mydkr1
 
