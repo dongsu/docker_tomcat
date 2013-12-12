@@ -132,11 +132,11 @@ Now you have two tomcat instances running on two docker instances each of which 
 Suggestions
 ===========
 
-1) Run all cloud servers hosting docker with servicenet IP only and run the docker instances launch script from with in a cloud server so that it can reach other cloud servers over the service net.
-2) Instead of using nova command line, you can use Cloud Servers API.
-3) Completely automate the launch of new docker instances based on load, and other performance merics. Also, build a scheduling mechanism to identify the right cloud server to run it on.
-4) Automate the launch of new cloud servers based on number of docker instances running on already existing ones, and other performance metrics. 
-5) Beware of RackConnect automation:
+* Run all cloud servers hosting docker with servicenet IP only and run the docker instances launch script from with in a cloud server so that it can reach other cloud servers over the service net.
+* Instead of using nova command line, you can use Cloud Servers API.
+* Completely automate the launch of new docker instances based on load, and other performance merics. Also, build a scheduling mechanism to identify the right cloud server to run it on.
+* Automate the launch of new cloud servers based on number of docker instances running on already existing ones, and other performance metrics. 
+* Beware of RackConnect automation:
    a) Its interacttion with how cloud servers are launched. Review: http://www.rackspace.com/knowledge_center/article/the-rackconnect-api. 
    b) Als, see, accessing RackConnected public cloud servers: http://www.rackspace.com/knowledge_center/article/accessing-rackconnected-cloud-servers
 
@@ -144,17 +144,17 @@ Suggestions
 References
 ==========
 
-1) http://linuxg.net/how-to-install-oracle-java-jdk-678-on-ubuntu-13-04-12-10-12-04/
-2) http://blog.trifork.com/2013/08/15/using-docker-to-efficiently-create-multiple-tomcat-instances/
-3) http://developer.rackspace.com/blog/slumlord-hosting-with-docker.html
-4) https://gist.github.com/jgeurts/5847108
-5) https://www.digitalocean.com/community/articles/how-to-set-up-nginx-load-balancing
-6) http://tutum.co/2013/11/23/remote-and-secure-use-of-docker-api-with-python-part-ii-of-ii/
-7) http://docs.docker.io/en/latest/api/docker_remote_api/
-8) https://github.com/dotcloud/docker-py
+* http://linuxg.net/how-to-install-oracle-java-jdk-678-on-ubuntu-13-04-12-10-12-04/
+* http://blog.trifork.com/2013/08/15/using-docker-to-efficiently-create-multiple-tomcat-instances/
+* http://developer.rackspace.com/blog/slumlord-hosting-with-docker.html
+* https://gist.github.com/jgeurts/5847108
+* https://www.digitalocean.com/community/articles/how-to-set-up-nginx-load-balancing
+* http://tutum.co/2013/11/23/remote-and-secure-use-of-docker-api-with-python-part-ii-of-ii/
+* http://docs.docker.io/en/latest/api/docker_remote_api/
+* https://github.com/dotcloud/docker-py
 
 Files
 =====
-1) Dockerfile, docker
-2) nginx default.conf and backends
-3) docker instance automation script
+* Dockerfile, docker
+* nginx default.conf and backends
+* docker instance automation script
