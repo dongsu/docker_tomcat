@@ -34,7 +34,7 @@ Steps
 
 Once it is ready, note accessIPv4. In the following instructions use this IP for all references to mydkr1.
 
-4) Connect to mydkr1 and prepare it with docker
+4) Connect to mydkr1 and prepare it with docker::
 
    $ ssh -i mykey root@192.237.188.82
    
