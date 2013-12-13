@@ -97,7 +97,6 @@ Once it is ready, note accessIPv4. In the following instructions use this IP for
 
     e) Exit from mydkr1 back to your workstation::
 
-
        # exit
 
 11) Take a VM image snapshot. This can be used to create additional cloud servers to scale::
@@ -113,6 +112,8 @@ Once it is ready, note accessIPv4. In the following instructions use this IP for
 
     $ nova show mynginx
 
+In the below commands replace references to mynginx with this IP.
+
 14) Log into this cloud server, mynginx, and install nginx::
 
     $ ssh -i mykey root@mynginx
@@ -123,7 +124,7 @@ Once it is ready, note accessIPv4. In the following instructions use this IP for
 
     a) First disable sites-enabled by commenting out the line "include /etc/nginx/sites-enabled/\*" in /etc/nginx/nginx.conf.
 
-    b) Copy backends, and default.conf to /etc/nginx/conf.d by modifying them as needed. You can start with empty backends or use the docker instance running in mydkr1 as the sole server.
+    b) Copy backends, and default.conf to /etc/nginx/conf.d by modifying them as needed. Update backends with the the docker instance running in mydkr1 as the sole server. You can use either public or servicenet IP for mydkr1 since it is accessed locally by nginx.
 
     c) You also might want to set up nginx to start on every boot.
 
@@ -131,7 +132,12 @@ Once it is ready, note accessIPv4. In the following instructions use this IP for
 
         # service nginx restart
 
-16) Next we create another cloud server that can host more docker containers. It will be more complete to demonstrate the functionality with two cloud servers.
+    e) Exit from nginx and get back to your workstation::
+
+       # exit
+
+
+16) Next we create another cloud server that can host more docker containers based on the snapshot created from mydkr1. It will be more complete to demonstrate the functionality with two cloud servers.
 
    First Find the image id of the snapshot created earlier with::
 
@@ -140,11 +146,13 @@ Once it is ready, note accessIPv4. In the following instructions use this IP for
    $ nova boot --image <image id from above> --flavor 2 --file /root/.ssh/authorized_keys=mykey.pub mydkr2
 
 
-Now you can use the script run_docker.py as the starting point to run an instance of docker in this cloud server (or any other cloud server)::
+Now you can use the script run_docker.py run an instance of docker in any of above cloud servers (mydkr1 or mydkr2 or any others). For example::
 
-     $ run_docker.py ...
+     $ python run_docker.py mydkr2 5555 mynginx root mykey
 
-Now you have two tomcat instances running on two docker instances each of which is running on a separate cloud server. And both are behind the nginx proxy.
+Now you have two copies of tomcat application running on two docker instances each of which is running on a separate cloud server.
+
+And both are behind the nginx proxy.
 
 17) Test: from your work station issue curl command to make sure that tomcat welcome page shows up::
 

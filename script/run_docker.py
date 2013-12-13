@@ -2,7 +2,7 @@ from fabric.contrib.files import contains, sed
 from fabric.context_managers import settings
 import docker
 import sys
-
+from fabric.api import run as remote_run
 
 def get_mapped_port(info, exposed_port):
     return info['NetworkSettings']['Ports']['%s/tcp' % (exposed_port,)][0]['HostPort']
@@ -21,6 +21,8 @@ def add_server_to_nginx(nginx_host, user, key_file, new_server):
         else:
             print "Server does not exist in nginx backends!"
             sed("/etc/nginx/conf.d/backends", before="}", after="    server %s max_fails=1, fail_timeout=15s;\\n}" % (new_server,), use_sudo=False)
+
+        remote_run("/usr/sbin/nginx -s reload")
 
 def run(docker_host, docker_port):
     client = docker.Client(base_url="http://%s:%s" % (docker_host, docker_port))
