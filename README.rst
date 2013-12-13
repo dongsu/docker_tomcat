@@ -174,7 +174,7 @@ Suggestions
 * Instead of using nova command line, you can use Cloud Servers API.
 * Completely automate the launch of new docker instances based on load, and other performance merics. Also, build a scheduling mechanism to identify the right cloud server to run it on.
 * Automate the launch of new cloud servers based on number of docker instances running on already existing ones, and other performance metrics.
-* Make sure to read RackConnect automation:
+* If your account is RackConnected, Make sure to read:
    a) Its interaction with how cloud servers are launched. Review: http://www.rackspace.com/knowledge_center/article/the-rackconnect-api.
    b) Also, see, accessing RackConnected public cloud servers: http://www.rackspace.com/knowledge_center/article/accessing-rackconnected-cloud-servers
 
