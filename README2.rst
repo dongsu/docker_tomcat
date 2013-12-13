@@ -39,45 +39,45 @@ Notes
 Detailed Steps
 ==============
 
-1) First create a ssh key pair to use for logging into cloud servers, for example::
+1. First create a ssh key pair to use for logging into cloud servers, for example::
 
     $ ssh-keygen -q -t rsa -f mykey -N ""
 
-2) Create a cloud server to run nginx.
+2. Create a cloud server to run nginx.
 
-   a) create cloud server::
+   a. create cloud server::
 
       $ nova boot --image df27d481-63a5-40ca-8920-3d132ed643d9 --flavor 2 --file /root/.ssh/authorized_keys=mykey.pub mynginx
 
-   b) Wait for the nginx cloud server to start and be active. Use the below command to check the status as well as to get the IP(accessIP4)::
+   b. Wait for the nginx cloud server to start and be active. Use the below command to check the status as well as to get the IP(accessIP4)::
 
       $ nova show mynginx
 
-   c) In the below commands replace references to mynginx with this IP.
+   c. In the below commands replace references to mynginx with this IP.
 
-   d) Log into this cloud server, mynginx, and install nginx::
+   d. Log into this cloud server, mynginx, and install nginx::
 
       $ ssh -i mykey root@mynginx
 
       # apt-get install nginx
 
 
-   e) Configure nginx by first disabling sites-enabled by commenting out the line "include /etc/nginx/sites-enabled/\*" in /etc/nginx/nginx.conf.
+   e. Configure nginx by first disabling sites-enabled by commenting out the line "include /etc/nginx/sites-enabled/\*" in /etc/nginx/nginx.conf.
 
-   f) Copy backends, and default.conf to /etc/nginx/conf.d.
+   f. Copy backends, and default.conf to /etc/nginx/conf.d.
 
-   g) You also might want to set up nginx to start on every boot.
+   g. You also might want to set up nginx to start on every boot.
 
-   h) restart nginx::
+   h. restart nginx::
 
        # service nginx restart
 
-   i) Exit from nginx and get back to your workstation::
+   i. Exit from nginx and get back to your workstation::
 
        # exit
 
 
-3) Create a cloud server to install install docker. It will be configured with a docker image that includes JDK+tomcat. 
+3. Create a cloud server to install install docker. It will be configured with a docker image that includes JDK+tomcat. 
    The same cloud server is snapshotted so that additional cloud servers can be created from it as necessary
 
 
@@ -150,12 +150,12 @@ Detailed Steps
 
        # exit
 
-4) Take a VM image snapshot. This can be used to create additional cloud servers to scale::
+4. Take a VM image snapshot. This can be used to create additional cloud servers to scale::
 
     $ nova image-create --poll mydkr1 mydkr_snapshot
 
 
-5) Next we create another cloud server that can host more docker containers based on the snapshot created from mydkr1. It will be more complete to demonstrate the functionality with two cloud servers.
+5. Next we create another cloud server that can host more docker containers based on the snapshot created from mydkr1. It will be more complete to demonstrate the functionality with two cloud servers.
 
    a) First Find the image id of the snapshot created earlier with::
 
@@ -165,7 +165,7 @@ Detailed Steps
 
    b) Wait until mydkr2 is ACTIVE and note the IP
 
-6) You can use the script run_docker.py run instances of docker in any of above cloud servers (mydkr1 or mydkr2 and so on). 
+6. You can use the script run_docker.py run instances of docker in any of above cloud servers (mydkr1 or mydkr2 and so on). 
    This script also updates the nginx upstream servers configuration.
    It uses docker remote client API python binding to communicate with docker daemon.
 
@@ -174,7 +174,7 @@ Detailed Steps
      $ python run_docker.py mydkr2 5555 mynginx root mykey
 
 
-7) Test: point your browser to http://mynginx and make sure that tomcat welcome page shows up::
+7. Test: point your browser to http://mynginx and make sure that tomcat welcome page shows up::
 
 
 Suggestions
