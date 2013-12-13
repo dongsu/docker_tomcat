@@ -62,10 +62,17 @@ Once it is ready, note accessIPv4. In the following instructions use this IP for
    # apt-get install lxc-docker
 
 
-6) Update docker configuration so that the daemon binds both unix socket and TCP ports. To access the daemon from a remote client, you need TCP port. We will use this later to launch new docker instances remotely from a script. Here are the contents of the config file::
+6) Update docker configuration so that the daemon binds both unix socket and TCP ports. To access the daemon from a remote client, you need TCP port. We will use this later to launch new docker instances remotely from a script.
 
-     root@mydkr1:~# cat /etc/default/docker
-     DOCKER_OPTS="-H unix:///var/run/docker.sock -H tcp://0.0.0.0:5555"
+     a) Here are the contents of the config file::
+
+        root@mydkr1:~# cat /etc/default/docker
+        DOCKER_OPTS="-H unix:///var/run/docker.sock -H tcp://0.0.0.0:5555"
+
+     b) Stop and restart docker so that the configuration is effective::
+
+        $ service docker stop
+        $ service docker start
 
 7) Verify that docker is correctly installed::
 
@@ -124,7 +131,7 @@ In the below commands replace references to mynginx with this IP.
 
     a) First disable sites-enabled by commenting out the line "include /etc/nginx/sites-enabled/\*" in /etc/nginx/nginx.conf.
 
-    b) Copy backends, and default.conf to /etc/nginx/conf.d by modifying them as needed. Update backends with the the docker instance running in mydkr1 as the sole server. You can use either public or servicenet IP for mydkr1 since it is accessed locally by nginx.
+    b) Copy backends, and default.conf to /etc/nginx/conf.d by modifying them as needed. Update backends with the the docker instance running in mydkr1 as the sole server. You can use either public or servicenet IP for mydkr1 since it is accessed locally by nginx. Make sure to start the tomcat instance in mydkr1.
 
     c) You also might want to set up nginx to start on every boot.
 
@@ -147,7 +154,7 @@ In the below commands replace references to mynginx with this IP.
 
 Wait until mydkr2 is ACTIVE.
 
-17) Now you can use the script run_docker.py run an instance of docker in any of above cloud servers (mydkr1 or mydkr2 or any others). For example::
+17) Now you can use the script run_docker.py run additional instances of docker in any of above cloud servers (mydkr1 or mydkr2 or any others). It uses docker remote client API python binding to communicate with docker daemon. For example::
 
      $ python run_docker.py mydkr2 5555 mynginx root mykey
 

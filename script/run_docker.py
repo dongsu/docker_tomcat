@@ -20,7 +20,7 @@ def add_server_to_nginx(nginx_host, user, key_file, new_server):
             print "Error: Server already exists in nginx backends!"
         else:
             print "Server does not exist in nginx backends!"
-            sed("/etc/nginx/conf.d/backends", before="}", after="    server %s max_fails=1, fail_timeout=15s;\\n}" % (new_server,), use_sudo=False)
+            sed("/etc/nginx/conf.d/backends", before="}", after="    server %s max_fails=1 fail_timeout=15s;\\n}" % (new_server,), use_sudo=False)
 
         remote_run("/usr/sbin/nginx -s reload")
 
