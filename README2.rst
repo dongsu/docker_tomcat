@@ -22,12 +22,12 @@ Highlevel plan
 
 1. Create a cloud server and install nginx
 2. Create a cloud server and install docker
-     a. Create a docker image with JDK+Tomcat
-     b. Create a snapshot of this cloud server
-     c. Using the snapshot of this cloud server, you can create as many more cloud servers as desired
+   a. Create a docker image with JDK+Tomcat
+   b. Create a snapshot of this cloud server
+   c. Using the snapshot of this cloud server, you can create as many more cloud servers as desired
 3. Using provided script (run_docker.py) launch docker with tomcat instances in these cloud server instances. Or you can do this manually:
-     a. run an instance of docker+tomcat in chosen cloud server
-     b. add the docker instance to list of servers for nginx upstream module and reload nginx
+   a. run an instance of docker+tomcat in chosen cloud server
+   b. add the docker instance to list of servers for nginx upstream module and reload nginx
 4. Test by browsing to http://nginxhostip
 
 Notes
