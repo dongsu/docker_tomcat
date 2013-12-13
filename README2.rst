@@ -86,9 +86,9 @@ Detailed Steps
       $ nova boot --image df27d481-63a5-40ca-8920-3d132ed643d9 --flavor 2 --file /root/.ssh/authorized_keys=mykey.pub mydkr1
 
    b) Wait for the mydkr1 to start and ready. You can check the status with below command. Once it is ready, note accessIPv4. 
-      In the following instructions use this IP for all references to mydkr1.
+      In the following instructions use this IP for all references to mydkr1::
 
-::
+
       $ nova show mydkr1
 
 
