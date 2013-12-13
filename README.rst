@@ -145,7 +145,7 @@ In the below commands replace references to mynginx with this IP.
    $ nova image-list | grep mydkr_snapshot
    $ nova boot --image <image id from above> --flavor 2 --file /root/.ssh/authorized_keys=mykey.pub mydkr2
 
-Wait for mydkr2 until ACTIVE.
+Wait until mydkr2 is ACTIVE.
 
 17) Now you can use the script run_docker.py run an instance of docker in any of above cloud servers (mydkr1 or mydkr2 or any others). For example::
 
