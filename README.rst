@@ -145,8 +145,9 @@ In the below commands replace references to mynginx with this IP.
    $ nova image-list | grep mydkr_snapshot
    $ nova boot --image <image id from above> --flavor 2 --file /root/.ssh/authorized_keys=mykey.pub mydkr2
 
+Wait for mydkr2 until ACTIVE.
 
-Now you can use the script run_docker.py run an instance of docker in any of above cloud servers (mydkr1 or mydkr2 or any others). For example::
+17) Now you can use the script run_docker.py run an instance of docker in any of above cloud servers (mydkr1 or mydkr2 or any others). For example::
 
      $ python run_docker.py mydkr2 5555 mynginx root mykey
 
@@ -154,7 +155,7 @@ Now you have two copies of tomcat application running on two docker instances ea
 
 And both are behind the nginx proxy.
 
-17) Test: from your work station issue curl command to make sure that tomcat welcome page shows up::
+18) Test: from your work station issue curl command to make sure that tomcat welcome page shows up::
 
      $ curl -X GET http://mynginx:80
 
