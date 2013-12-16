@@ -62,6 +62,9 @@ Detailed Steps
    d. Log into this cloud server, mynginx, and install nginx::
 
       $ ssh -i mykey root@mynginx
+
+     Now install nginx::
+
       # apt-get install nginx
 
    e. Configure nginx by first disabling sites-enabled by commenting out the line "include /etc/nginx/sites-enabled/\*" in /etc/nginx/nginx.conf.
