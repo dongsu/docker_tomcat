@@ -62,9 +62,7 @@ Detailed Steps
    d. Log into this cloud server, mynginx, and install nginx::
 
       $ ssh -i mykey root@mynginx
-
       # apt-get install nginx
-
 
    e. Configure nginx by first disabling sites-enabled by commenting out the line "include /etc/nginx/sites-enabled/\*" in /etc/nginx/nginx.conf.
 
@@ -189,6 +187,9 @@ Suggestions
 * Instead of using nova command line, you can use Cloud Servers API.
 * Completely automate the launch of new docker instances based on load, and other performance merics. Also, build a scheduling mechanism to identify the right cloud server to run it on.
 * Automate the launch of new cloud servers based on number of docker instances running on already existing ones, and other performance metrics.
+* Build the abiity to create new nginx virtual service instances programmatically.
+* Create logcal groups docker instances for each project. Each one in the group has identical properties like same tomcat version. Automate the installation of a web application into a group - leading first steps towards creating a Tomcat PaaS.
+* RBAC and bunch of other features can be added too.
 * If your account is RackConnected, Make sure to read:
    a) Its interaction with how cloud servers are launched. Review: http://www.rackspace.com/knowledge_center/article/the-rackconnect-api.
    b) Also, see, accessing RackConnected public cloud servers: http://www.rackspace.com/knowledge_center/article/accessing-rackconnected-cloud-servers
