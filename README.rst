@@ -209,6 +209,7 @@ References
 * http://tutum.co/2013/11/23/remote-and-secure-use-of-docker-api-with-python-part-ii-of-ii/
 * http://docs.docker.io/en/latest/api/docker_remote_api/
 * https://github.com/dotcloud/docker-py
+* http://deis.io/
 
 Files
 =====
